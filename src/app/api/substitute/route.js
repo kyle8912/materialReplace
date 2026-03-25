@@ -36,26 +36,24 @@ export async function POST(request) {
 
 stars는 1~3 정수. stars_label은 3="강추", 2="가능", 1="비슷하지만 차이 있음". substitutes는 3~4개. 한국 가정 요리 기준, 마트에서 흔히 구할 수 있는 재료로. recipe.title이 null이면 steps도 빈 배열로.`
 
-  const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': process.env.ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      messages: [{ role: 'user', content: prompt }],
-    }),
-  })
+  const apiRes = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.3 },
+      }),
+    }
+  )
 
   if (!apiRes.ok) {
     return Response.json({ error: 'AI 응답 오류' }, { status: 500 })
   }
 
   const data = await apiRes.json()
-  const raw = data.content.map((b) => b.text || '').join('').trim()
+  const raw = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ?? ''
   const clean = raw.replace(/^```json|^```|```$/gm, '').trim()
 
   try {
