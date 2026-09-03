@@ -1,65 +1,82 @@
-#재료 대체 검색
+# 🍳 재료 대체 검색
 
-요리 중 재료가 부족할 때, 대체 재료와 직접 만드는 소스 레시피를 AI(Google Gemini)가 알려주는 웹앱입니다.
+> 요리 중 재료가 없을 때, 현재 있는 재료로 만들 수 있는 **대체 재료**와 레시피를 AI(Google Genimi)가 제안해주는 스마트 웹 애플리케이션
+<br/>
 
-## 기술 스택
+## 🛠️ 기술 스택 (Tech Stack)
 
-- [Next.js 16](https://nextjs.org/) (App Router)
-- React 19
-- Google Gemini API — `gemini-flash-lite-latest` (무료 티어, 항상 최신 flash-lite 모델을 가리키는 별칭)
+![Next.js](https://img.shields.io/badge/Next.js%2016-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React%2019-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Google Gemini](https://img.shields.io/badge/Google%20Gemini-4285F4?style=for-the-badge&logo=google&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
-> 참고: 원래는 `gemini-1.5-flash`를 쓰려고 했지만, 해당 모델은 Google 쪽에서 완전히 종료되어 API에서 조회되지 않습니다 (2026년 9월 기준). 대신 최신 flash-lite 모델을 항상 가리키는 별칭인 `gemini-flash-lite-latest`를 사용해서, 앞으로 특정 버전이 또 종료되어도 코드를 바꿀 필요가 없게 했습니다.
+*   **Framework:** [Next.js 16](https://nextjs.org/) (App Router 기반)
+*   **Library:** React 19
+*   **AI API:** Google Gemini API
 
-## 로컬 실행
+<br/>
 
-1. 의존성 설치
+## 🚀 로컬 개발 환경 설정 (Getting Started)
 
-   ```bash
-   npm install
-   ```
+프로젝트를 로컬 환경에서 실행하기 위한 단계입니다.
 
-2. Gemini API 키 발급
-
-   [Google AI Studio](https://aistudio.google.com/app/apikey)에서 무료로 API 키를 발급받으세요.
-
-3. 환경 변수 설정
-
-   `.env.local.example`을 복사해 `.env.local`을 만들고 발급받은 키를 넣습니다.
-
-   ```bash
-   cp .env.local.example .env.local
-   ```
-
-   ```
-   GEMINI_API_KEY=발급받은_키_값
-   ```
-
-4. 개발 서버 실행
-
-   ```bash
-   npm run dev
-   ```
-
-   브라우저에서 http://localhost:3000 접속
-
-## Vercel 배포
-
-1. 이 저장소를 GitHub에 push 합니다.
-2. [Vercel](https://vercel.com)에서 New Project → 해당 GitHub 저장소 선택 (Next.js는 자동으로 인식됩니다).
-3. Environment Variables에 `GEMINI_API_KEY`를 추가합니다 (Settings → Environment Variables, 또는 배포 설정 화면에서 바로 추가).
-4. Deploy를 누르면 완료됩니다.
-
-## 폴더 구조
-
-```
-src/app/
-  page.js                 # 메인 페이지 (검색 폼 + 결과 UI)
-  layout.js               # 루트 레이아웃, 폰트/메타데이터
-  globals.css             # 전체 스타일 (라이트/다크 모드 지원)
-  api/substitute/route.js # Gemini 호출 API 라우트 (Edge Runtime)
+### 1. 패키지 설치
+저장소를 클론한 후, 프로젝트 루트 디렉토리에서 의존성 패키지를 설치합니다.
+```bash
+npm install
 ```
 
-## 참고
+### 2. Gemini API 키 발급
+[Google AI Studio](https://aistudio.google.com/app/apikey)에 접속하여 무료 API 키를 발급받습니다.
 
-- API 키는 서버 사이드(API Route)에서만 사용되며 브라우저에 노출되지 않습니다.
-- Gemini 무료 티어는 분당/일당 요청 수 제한이 있습니다. 제한 초과 시 429 오류 메시지가 표시됩니다.
+### 3. 환경 변수(Environment Variables) 설정
+루트 디렉토리에 있는 `.env.local.example` 파일을 복사하여 `.env.local` 파일을 생성합니다.
+```bash
+cp .env.local.example .env.local
+```
+생성된 `.env.local` 파일을 열고 발급받은 API 키를 입력합니다.
+```env
+GEMINI_API_KEY=발급받은_당신의_API_키_값
+```
+
+### 4. 개발 서버 실행
+설정이 완료되면 아래 명령어로 로컬 서버를 구동합니다.
+```bash
+npm run dev
+```
+브라우저를 열고 [http://localhost:3000](http://localhost:3000)에 접속하여 앱을 확인합니다.
+
+<br/>
+
+## Vercel 배포 가이드 (Deployment)
+
+Next.js에 최적화된 [Vercel](https://vercel.com)을 통해 클릭 몇 번으로 쉽게 배포할 수 있습니다.
+
+1.  수정된 코드를 본인의 **GitHub 저장소에 Push** 합니다.
+2.  Vercel 대시보드에서 **New Project**를 클릭하고, 해당 GitHub 저장소를 선택합니다. (Next.js 프레임워크는 자동으로 인식됩니다.)
+3.  **Environment Variables** 설정 섹션에서 변수명 `GEMINI_API_KEY`와 발급받은 키 값을 추가합니다. (이후 `Settings → Environment Variables`에서도 수정 가능합니다.)
+4.  **Deploy** 버튼을 누르면 성공적으로 배포가 완료됩니다.
+
+<br/>
+
+## 📂 폴더 구조 (Directory Structure)
+
+App Router 구조를 채택하여 라우팅과 API 처리를 직관적으로 분리했습니다.
+
+```text
+src/
+ └── app/
+      ├── page.js                 # 메인 페이지 (재료 검색 폼 및 AI 결과 출력 UI)
+      ├── layout.js               # 루트 레이아웃 (공통 헤더/푸터, 폰트 및 메타데이터 설정)
+      ├── globals.css             # 전역 스타일시트 (라이트/다크 모드 완벽 지원)
+      └── api/
+           └── substitute/
+                └── route.js      # Gemini API 호출 라우트 (Edge Runtime 최적화)
+```
+
+<br/>
+
+## ⚠️ 참고 사항 (Notices)
+
+*   **보안:** `GEMINI_API_KEY`는 서버 사이드(`api/substitute/route.js`)에서만 안전하게 호출되며, 클라이언트(브라우저) 환경에는 절대 노출되지 않습니다.
+*   **API 호출 제한:** 현재 Gemini 무료 티어를 사용 중이므로 분당/일당 API 요청 수에 제한이 있습니다. 사용량이 한도를 초과할 경우 `429 Too Many Requests` 오류 메시지가 UI에 표시될 수 있습니다.
